@@ -1,4 +1,4 @@
--- modules/bunnyhop.lua - Kleizer Hub (Rayfield)
+-- modules/bunnyhop.lua - Kleizer Hub (Rayfield v2.0)
 -- =====================================================
 
 -- 🧠 Servicios
@@ -10,17 +10,18 @@ local LocalPlayer = Players.LocalPlayer
 -- 🔹 Datos del módulo
 local Module = {
     Name = "Bunny Hop",
-    Version = "1.4",
+    Version = "2.0",
     Author = "Klever"
 }
+
+-- 🔹 Variables globales
+_G.BunnyHopEnabled = _G.BunnyHopEnabled or false
+_G.BunnyHopSpeed   = _G.BunnyHopSpeed   or 30
+_G.BunnyHopHoldKey = _G.BunnyHopHoldKey or Enum.KeyCode.Space
 
 -- 🔹 Variables internas
 local BunnyHopConnection
 local IsKeyHeld = false
-
-_G.BunnyHopEnabled = _G.BunnyHopEnabled or false
-_G.BunnyHopKey = _G.BunnyHopKey or Enum.KeyCode.Space
-_G.BunnyHopSpeed = _G.BunnyHopSpeed or 30
 
 -- =====================================================
 -- ⚙️ FUNCIONES PRINCIPALES
@@ -30,25 +31,24 @@ local function StartBunnyHop()
         BunnyHopConnection:Disconnect()
         BunnyHopConnection = nil
     end
-
     BunnyHopConnection = RunService.Heartbeat:Connect(function()
-        if not _G.BunnyHopEnabled or not IsKeyHeld then return end
+        if not _G.BunnyHopEnabled then return end
+        if not IsKeyHeld then return end
 
         local Character = LocalPlayer.Character
         if not Character then return end
-
         local Humanoid = Character:FindFirstChildOfClass("Humanoid")
-        local Root = Character:FindFirstChild("HumanoidRootPart")
-        if not Humanoid or not Root then return end
+        local HRP      = Character:FindFirstChild("HumanoidRootPart")
+        if not Humanoid or not HRP then return end
 
         if Humanoid:GetState() == Enum.HumanoidStateType.Running then
             Humanoid.Jump = true
-            local moveDirection = Humanoid.MoveDirection
-            if moveDirection.Magnitude > 0 then
-                Root.Velocity = Vector3.new(
-                    moveDirection.X * _G.BunnyHopSpeed,
-                    Root.Velocity.Y,
-                    moveDirection.Z * _G.BunnyHopSpeed
+            local moveDir = Humanoid.MoveDirection
+            if moveDir.Magnitude > 0 then
+                HRP.Velocity = Vector3.new(
+                    moveDir.X * _G.BunnyHopSpeed,
+                    HRP.Velocity.Y,
+                    moveDir.Z * _G.BunnyHopSpeed
                 )
             end
         end
@@ -67,13 +67,16 @@ end
 -- =====================================================
 UserInputService.InputBegan:Connect(function(input, processed)
     if processed then return end
-    if input.KeyCode == _G.BunnyHopKey then
+    if input.KeyCode == _G.BunnyHopHoldKey then
         IsKeyHeld = true
+        if _G.BunnyHopEnabled then
+            StartBunnyHop()
+        end
     end
 end)
 
 UserInputService.InputEnded:Connect(function(input)
-    if input.KeyCode == _G.BunnyHopKey then
+    if input.KeyCode == _G.BunnyHopHoldKey then
         IsKeyHeld = false
     end
 end)
@@ -85,10 +88,10 @@ Players.PlayerRemoving:Connect(function(player)
 end)
 
 -- =====================================================
--- 🧩 INTERFAZ DEL MÓDULO
+-- 🧩 INTERFAZ DEL MÓDULO (Rayfield)
 -- =====================================================
 function Module.Init(tab)
-    local Section = tab:CreateSection("Movement / Bunny Hop")
+    local Section = tab:CreateSection("Bunny Hop Settings")
 
     Section:CreateToggle({
         Name = "Enable BunnyHop",
@@ -105,23 +108,23 @@ function Module.Init(tab)
     })
 
     Section:CreateKeybind({
-        Name = "Hop Key",
-        CurrentKeybind = _G.BunnyHopKey,
-        HoldToInteract = true, -- ✅ mantiene presionado
-        Flag = "BunnyHopKey",
-        Callback = function(Key)
-            _G.BunnyHopKey = Key
+        Name           = "Hold Key",
+        CurrentKeybind = _G.BunnyHopHoldKey,
+        HoldToInteract = true,
+        Flag           = "BunnyHopHoldKey",
+        Callback       = function(key)
+            _G.BunnyHopHoldKey = key
         end
     })
 
     Section:CreateSlider({
-        Name = "Speed",
-        Range = {10, 50},
-        Increment = 1,
-        Suffix = " u/s",
+        Name         = "Speed",
+        Range        = {10, 100},
+        Increment    = 1,
+        Suffix       = " u/s",
         CurrentValue = _G.BunnyHopSpeed,
-        Flag = "BunnyHopSpeed",
-        Callback = function(value)
+        Flag         = "BunnyHopSpeed",
+        Callback     = function(value)
             _G.BunnyHopSpeed = value
         end
     })
