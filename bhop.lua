@@ -10,7 +10,7 @@ local LocalPlayer = Players.LocalPlayer
 -- 🔹 Datos del módulo
 local Module = {
     Name = "Bunny Hop",
-    Version = "1.3",
+    Version = "1.4",
     Author = "Klever"
 }
 
@@ -90,7 +90,7 @@ end)
 function Module.Init(tab)
     local Section = tab:CreateSection("Movement / Bunny Hop")
 
-    tab:CreateToggle({
+    Section:CreateToggle({
         Name = "Enable BunnyHop",
         CurrentValue = _G.BunnyHopEnabled,
         Flag = "BunnyHopToggle",
@@ -104,17 +104,17 @@ function Module.Init(tab)
         end
     })
 
-    tab:CreateKeybind({
+    Section:CreateKeybind({
         Name = "Hop Key",
         CurrentKeybind = _G.BunnyHopKey,
-        HoldToInteract = true,
+        HoldToInteract = true, -- ✅ mantiene presionado
         Flag = "BunnyHopKey",
         Callback = function(Key)
             _G.BunnyHopKey = Key
         end
     })
 
-    tab:CreateSlider({
+    Section:CreateSlider({
         Name = "Speed",
         Range = {10, 50},
         Increment = 1,
