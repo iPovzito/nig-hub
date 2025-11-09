@@ -50,7 +50,7 @@ end
 -- 🚀 CARGAR MÓDULOS
 -- =========================================================
 -- 🐇 BunnyHop (Movimiento)
-LoadModule(MovementTab, "https://pastefy.app/ycJps6vj/raw")
+LoadModule(MovementTab, "https://pastefy.app/MLyLlE2E/raw")
 
 -- 🔫 Aquí puedes agregar más módulos fácilmente:
 -- LoadModule(RageTab, "https://tuscripts.com/rage/aimbot.lua")
