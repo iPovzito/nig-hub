@@ -50,7 +50,7 @@ end
 -- 🚀 CARGAR MÓDULOS
 -- =========================================================
 -- 🐇 BunnyHop (Movimiento)
-LoadModule(MovementTab, "https://raw.githubusercontent.com/iPovzito/nig-hub/refs/heads/main/bhop.lua")
+LoadModule(MovementTab, "https://pastefy.app/J1HXW3yI/raw")
 
 -- 🔫 Aquí puedes agregar más módulos fácilmente:
 -- LoadModule(RageTab, "https://tuscripts.com/rage/aimbot.lua")
