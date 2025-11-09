@@ -32,7 +32,7 @@ local function LoadModule(tab, url)
 end
 
 
-LoadModule(RageTab, "")  -- BunnyHop
+LoadModule(RageTab, "https://raw.githubusercontent.com/iPovzito/nig-hub/refs/heads/main/bhop.lua")  -- BunnyHop
 
 
 
